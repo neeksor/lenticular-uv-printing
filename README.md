@@ -1,5 +1,7 @@
 # Lenticular Raster
 
+> **在线访问地址**：[https://kermit-r-wood.github.io/lenticular-uv-printing/](https://kermit-r-wood.github.io/lenticular-uv-printing/)
+
 浏览器内运行的光栅画生成器：上传 2 张以上视角图片，生成底部交错图（8-bit RGB
 PNG）和 16-bit 光油深度图（带 1440 PPI 元数据），用于 eufyMake E1 等 UV
 打印机。**纯前端，不需要服务器，构建产物可以双击打开 `dist/index.html`
@@ -43,7 +45,7 @@ npm run preview  # 本地预览生产构建
 `vite.config.ts` 中 `base: "./"` 让 `dist/` 与部署路径解耦：
 
 - **双击 `dist/index.html`** —— 直接在浏览器跑，不需要 HTTP 服务器
-- **GitHub Pages** —— 把 `dist/` 推到 `gh-pages` 分支，子路径不影响资源加载
+- **GitHub Pages** —— 已配置 GitHub Actions 自动部署至 [在线地址](https://kermit-r-wood.github.io/lenticular-uv-printing/)，无需手动维护分支
 - **静态托管** —— Netlify / Vercel / S3 / nginx 任意路径都能用
 
 ## 用户操作
