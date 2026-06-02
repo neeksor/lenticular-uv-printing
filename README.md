@@ -1,8 +1,6 @@
 # Lenticular Raster
 
-[中文版](./README.md)
-
-> **Online Demo**: [https://kermit-r-wood.github.io/lenticular-uv-printing/](https://kermit-r-wood.github.io/lenticular-uv-printing/)
+> **Online Demo**: [https://neeksor.github.io/lenticular-uv-printing/](https://neeksor.github.io/lenticular-uv-printing/)
 
 An in-browser lenticular image generator: upload 2 or more perspective images to generate an interlaced bottom image (8-bit RGB PNG) and a 16-bit varnish depth map (with 1440 PPI metadata) for UV printers like eufyMake E1. **Pure front-end, no server required. The build output `dist/index.html` can be double-clicked to run directly, or hosted on GitHub Pages or any static site.**
 
@@ -41,7 +39,7 @@ npm run build    # Output to dist/, including index.html + assets/
 `vite.config.ts` uses `base: "./"` to decouple the build from the deployment path:
 
 - **Double-click `dist/index.html`**: Runs directly in the browser without an HTTP server.
-- **GitHub Pages**: Configured with GitHub Actions for automatic deployment to the [Live Demo](https://kermit-r-wood.github.io/lenticular-uv-printing/).
+- **GitHub Pages**: Configured with GitHub Actions for automatic deployment to the [Live Demo](https://neeksor.github.io/lenticular-uv-printing/).
 - **Static Hosting**: Compatible with Netlify, Vercel, S3, nginx, or any custom path.
 
 ## Usage
