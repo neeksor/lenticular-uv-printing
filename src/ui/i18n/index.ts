@@ -33,16 +33,7 @@ export function onLocaleChange(fn: (l: Locale) => void): () => void {
 }
 
 export function initLocale(): void {
-  let stored: Locale | null = null;
-  try {
-    const v = localStorage.getItem(STORAGE_KEY);
-    if (v === "zh" || v === "en") stored = v;
-  } catch {
-    /* ignore */
-  }
-  // No stored preference: default to Chinese (per project requirement).
-  current = stored ?? "zh";
-  document.documentElement.lang = current === "zh" ? "zh-CN" : "en";
+  document.documentElement.lang = "en";
   applyDom();
 }
 
