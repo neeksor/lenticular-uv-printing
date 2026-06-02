@@ -1,91 +1,91 @@
-# Lenticular Raster (光栅画生成器)
+# Lenticular Raster
 
-[English Version](./README_EN.md)
+[中文版](./README.md)
 
-> **在线访问地址**：[https://kermit-r-wood.github.io/lenticular-uv-printing/](https://kermit-r-wood.github.io/lenticular-uv-printing/)
+> **Online Demo**: [https://kermit-r-wood.github.io/lenticular-uv-printing/](https://kermit-r-wood.github.io/lenticular-uv-printing/)
 
-浏览器内运行的光栅画生成器：上传 2 张以上视角图片，生成底部交错图（8-bit RGB PNG）和 16-bit 光油深度图（带 1440 PPI 元数据），用于 eufyMake E1 等 UV 打印机。**纯前端，不需要服务器，构建产物可以双击打开 `dist/index.html` 直接用，也可托管到 GitHub Pages 或任意静态站点。**
+An in-browser lenticular image generator: upload 2 or more perspective images to generate an interlaced bottom image (8-bit RGB PNG) and a 16-bit varnish depth map (with 1440 PPI metadata) for UV printers like eufyMake E1. **Pure front-end, no server required. The build output `dist/index.html` can be double-clicked to run directly, or hosted on GitHub Pages or any static site.**
 
-## 默认面向 eufyMake E1
+## Default Settings for eufyMake E1
 
-- 1440 PPI 输出分辨率（PNG `pHYs` chunk 写入 56693 ppm）
-- 330 mm × 420 mm 打印面积校验
-- 5 mm 最大浮雕高度
-- 16-bit 光油深度通道（sine / arc 两种透镜剖面）
+- 1440 PPI output resolution (PNG `pHYs` chunk set to 56693 ppm)
+- 330 mm × 420 mm print area validation
+- 5 mm maximum relief height
+- 16-bit varnish depth channel (sine and arc lens profiles)
 
-## 开发
+## Development
 
-需要 Node.js 22+ 和 npm。
+Requires Node.js 22+ and npm.
 
 ```powershell
 git clone <repo-url>
 cd <repo>
 npm install
-npm run dev      # 启动 Vite 开发服务器（默认 http://localhost:5173）
+npm run dev      # Start Vite dev server (defaults to http://localhost:5173)
 ```
 
-## 测试
+## Testing
 
 ```powershell
-npm test         # 单元测试 + 端到端 sanity（输出到 out/）
+npm test         # Unit tests + end-to-end sanity tests (output to out/)
 ```
 
-51 个单元测试覆盖：lens 周期 / 像素物理映射、sine + arc 剖面、按列与按行的帧索引、E1 床尺寸校验、PNG 编码 (8-bit RGB + 16-bit 灰度) 与 pHYs DPI 元数据、校准网格几何。
+51 unit tests covering: lens pitch / physical pixel mapping, sine + arc profiles, frame indexing by column/row, E1 bed size validation, PNG encoding (8-bit RGB + 16-bit grayscale) with pHYs DPI metadata, and calibration grid geometry.
 
-## 构建与部署
+## Build and Deployment
 
 ```powershell
-npm run build    # 产出 dist/，包含 index.html + assets/
+npm run build    # Output to dist/, including index.html + assets/
 ```
 
-`vite.config.ts` 中 `base: "./"` 让 `dist/` 与部署路径解耦：
+`vite.config.ts` uses `base: "./"` to decouple the build from the deployment path:
 
-- **双击 `dist/index.html`** —— 直接在浏览器跑，不需要 HTTP 服务器
-- **GitHub Pages** —— 已配置 GitHub Actions 自动部署至 [在线地址](https://kermit-r-wood.github.io/lenticular-uv-printing/)，无需手动维护分支
-- **静态托管** —— Netlify / Vercel / S3 / nginx 任意路径都能用
+- **Double-click `dist/index.html`**: Runs directly in the browser without an HTTP server.
+- **GitHub Pages**: Configured with GitHub Actions for automatic deployment to the [Live Demo](https://kermit-r-wood.github.io/lenticular-uv-printing/).
+- **Static Hosting**: Compatible with Netlify, Vercel, S3, nginx, or any custom path.
 
-## 用户操作
+## Usage
 
-打开站点后：
+Open the site and follow these steps:
 
-1. **生成** —— 上传 ≥2 张视角图片，填宽高（mm）、PPI、LPI、相位、深度曲线，提交后预览交错图和 16-bit 深度图，点链接下载两张 PNG。
-2. **相位校准** —— 折叠区域里展开。一次生成多个 LPI × 多个相位的测试块拼图（行 = LPI，列 = 相位），每块左上角带文字标签。打印一张就能挑出最佳参数。
+1. **Generation**: Upload ≥2 perspective images, set width/height (mm), PPI, LPI, phase, and depth curve. Submit to preview the interlaced image and 16-bit depth map, and click links to download the two PNGs.
+2. **Phase Calibration**: Expand the calibration section. Generate a grid of multiple LPI × multiple phase test blocks (rows = LPI, columns = phase) labeled in the top-left corner of each block. Printing this single grid helps identify the optimal parameters.
 
-## 参数说明
+## Parameters
 
-| 参数 | 说明 |
+| Parameter | Description |
 |---|---|
-| 宽 / 高 | 物理打印尺寸（毫米）。当前软上限 100 mm × 100 mm，超过会弹警告但仍允许。E1 床上限 330 × 420 mm 强制校验。 |
-| PPI | 输出分辨率，默认 1440 |
-| LPI | 透镜每英寸线数。`60` 起步；视角切换太陡可降到 `30` / `40`。1440 / 60 = 24 px/pitch |
-| 相位 | 透镜节距偏移，单位为节距比例。例如 `-0.125`、`0`、`0.25` |
-| 曲线 | `sine`（正弦）或 `arc`（圆弧 cap），决定深度图剖面 |
-| 方向 | `vertical` 左右视角切换 / `horizontal` 上下视角切换 |
-| 最大深度值 | 16-bit 灰度上限。例如 `32768` 限制成 50% 浮雕高 |
+| Width / Height | Physical print size (mm). Soft limit of 100 mm × 100 mm (warns but allows). Forced validation for E1 bed size (330 × 420 mm). |
+| PPI | Output resolution, defaults to 1440 |
+| LPI | Lenticular lines per inch. Starts at `60`; if view switching is too steep, reduce to `30` / `40`. 1440 / 60 = 24 px/pitch |
+| Phase | Lens pitch offset as a fraction of pitch. For example, `-0.125`, `0`, `0.25` |
+| Curve | `sine` (sinusoidal) or `arc` (cylindrical cap), determines the depth map profile |
+| Direction | `vertical` (left/right view switching) or `horizontal` (up/down view switching) |
+| Max Depth Value | 16-bit grayscale upper limit. For example, `32768` limits depth to 50% relief height |
 
-第一次物理校准建议：用 20 mm 块 × 多 LPI（`30,40,60`）× 单相位 `0`，找出最低浮雕能稳定切换的 LPI；然后用最佳 LPI 扫相位定位。
+**First-time physical calibration tip**: Use a 20 mm block × multiple LPIs (`30, 40, 60`) × single phase `0` to find the lowest relief LPI that switches stably. Then sweep phases with the best LPI.
 
-## 示例素材
+## Example Assets
 
-`examples/ab-flip/` 里有现成的双视角和三视角源图，可以直接拖进网页测试：
+`examples/ab-flip/` contains pre-made dual-view and triple-view source images that can be dragged into the web interface for testing:
 
 - `A-left-view.png` / `B-right-view.png` / `C-center-view.png`
-- `ab-flip-interlaced-42mm-60lpi.png` / `ab-flip-depth-42mm-60lpi.png` 是早期 Python 版本的示例输出，作为视觉参考保留
+- `ab-flip-interlaced-42mm-60lpi.png` / `ab-flip-depth-42mm-60lpi.png` are legacy Python version outputs kept as visual references.
 
-## 技术栈
+## Tech Stack
 
-- TypeScript + Vite（vanilla，没有 UI 框架）
-- [pica](https://github.com/nodeca/pica) Lanczos3 重采样（约 30 KB wasm）
-- [fflate](https://github.com/101arrowz/fflate) deflate 压缩
-- 自写 PNG 编码器（IHDR + pHYs + IDAT + IEND，~150 行）
-- 自写 CRC32 表
-- 测试：vitest
+- TypeScript + Vite (vanilla, no UI framework)
+- [pica](https://github.com/nodeca/pica) Lanczos3 resampling (~30 KB wasm)
+- [fflate](https://github.com/101arrowz/fflate) deflate compression
+- Custom PNG encoder (IHDR + pHYs + IDAT + IEND, ~150 lines)
+- Custom CRC32 table
+- Testing: vitest
 
-总运行时 payload ≈ 56 KB JS（gzip 23 KB）+ 3 KB CSS。
+Total runtime payload: ≈ 56 KB JS (gzip 23 KB) + 3 KB CSS.
 
-## 已知限制
+## Known Limitations
 
-- 计算放在主线程，渲染期间页面会有几秒卡顿。≤100 mm × 100 mm 体感可接受；更大尺寸建议二期挪到 Web Worker。
-- Canvas 文字标签在 1440 PPI 下偏小（11 px ≈ 0.2 mm）。校准块上肉眼勉强能辨认，需要更清晰可二期做 LPI 自适应字号。
-- 上传超大源图（4K+ JPG）`createImageBitmap` 会占内存高，pica 缩放也耗时。建议源图压到目标分辨率 2–3 倍以内。
-- Lanczos3 实现细节与 PIL 的 LANCZOS 不完全一致，缩放结果有 ≤ 1 LSB 量级的差异（不影响视觉与光栅效果）。
+- Computations run on the main thread, causing the page to freeze for a few seconds during rendering. This is acceptable for sizes ≤100 mm × 100 mm. For larger sizes, offloading to a Web Worker is planned for phase two.
+- Canvas text labels at 1440 PPI are small (11 px ≈ 0.2 mm). They are barely legible on the calibration blocks. Adaptive LPI font sizing is planned for phase two to improve legibility.
+- Uploading massive source images (4K+ JPG) consumes significant memory and slows down pica scaling. It is recommended to resize source images to 2–3x of the target resolution.
+- The Lanczos3 implementation has minor differences compared to PIL's LANCZOS, resulting in scaling variances of ≤ 1 LSB (does not affect visual or lenticular quality).
