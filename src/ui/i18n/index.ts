@@ -6,7 +6,7 @@ export type Locale = "zh" | "en";
 const STORAGE_KEY = "lenticular.locale";
 const DICTS: Record<Locale, Dict> = { zh: ZH_DICT, en: EN_DICT };
 
-let current: Locale = "zh";
+let current: Locale = "en";
 
 const listeners = new Set<(l: Locale) => void>();
 
